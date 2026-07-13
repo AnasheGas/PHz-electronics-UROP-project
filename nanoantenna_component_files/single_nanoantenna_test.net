@@ -1,0 +1,47 @@
+* C:\Users\allen\Downloads\Getting started\Getting started\nanoantenna_component_files\single_nanoantenna_test.asc
+B§store1 N001 0 V=gaussian_pulse({amp}, 100, {sigdur}, {phase})
+R1 N002 0 {Rwire}
+XX1 N001 N002 0 nanoantenna_component params: nanoantenna_component
+
+* block symbol definitions
+.subckt nanoantenna_component Vin E C
+B1 btmEmtr2 C I=ifn(40, 1.5414u, 6.8309, 5.3, V(C, btmEmtr2), 15, 1) + is(10, 0.005f, 290, 5.3, V(C, btmEmtr2), 15, 1)
+C1 N002 btmEmtr2 {Cbody}
+Cgap1 C btmEmtr2 {Cgap}
+C2 C N002 {Cwirebody}
+Rbod1 N002 N003 {0.5*(cp+1)*Rbody}
+R1 E N004 {0.5*(1-cp)*Rbody}
+L1 N003 E {0.5*(cp+1)*Lbody}
+L2 N004 btmEmtr2 {0.5*(1-cp)*Lbody}
+R2 N001 Vin {Rin}
+C3 N002 N001 {Cin}
+.param Cbody = 0.7089u
+.param Lbody = 158200
+.param Rbody = 4.0348K
+.param freq = 0.28201
+.param Cgap = 1.3618u
+.param Cwirebody = 0.7488u
+.param Lwire = 708593
+.param Rwire = 28.75K
+.param q = 1
+.param epsilon1 = 6.9*0.055263
+.param RTline = 6k
+.param phi = 5.3
+.param Rin = 71.8330K
+.param Cin = 49.8910u
+.param amp = 10E-12
+.param phase = 0.72*pi
+.param sigdur = 5.1
+.param Zin = 520K
+.func fn_v(f) 1 - f + f*ln(f)/6
+.func get_f(E) pwr(q, 3)/(4*pi*epsilon1*pwr(phi, 2))*E
+.func ifn(A, a, b, phi, vc, d, g) -1E-15*A*a*square(7*g*Efield(vc*1E+12, d))/phi*exp(-b*pwr(phi, 2/3)/(7*g*Efield(vc*1E+12, d))*fn_v(get_f(7*g*Efield(vc*1E+12, d))))
+.func Efield(v,d) abs(max(v/d, 0))
+.func is(A, alph, T, phi, vc, d, g) -1E-15*A*alph*square(T)*exp(min((-phi +0.5*sqrt((g*Efield(vc*1E+12, d)/(d*3.14*0.055263))/(0.8617u*T)), 0)))
+.ends nanoantenna_component
+
+.tran 0 165 0 0.01
+.param cp= -0.95
+.include "C:\Users\allen\Downloads\Getting started\Getting started\nanoantenna_component.lib"
+.backanno
+.end

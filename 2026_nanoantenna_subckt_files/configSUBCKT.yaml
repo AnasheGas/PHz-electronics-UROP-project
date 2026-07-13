@@ -1,0 +1,33 @@
+.param Cbody = 0.7089u
+.param Lbody = 158200
+.param Rbody = 4.0348K
+.param Cgap =	1.3618u
+.param Cwirebody = 0.7488u
+.param Lwire = 708593
+.param Rwire = 30.0K
+.param q = 1
+.param epsilon1 = 6.9*0.055263
+.param RTline = 6k
+.param phi = 5.3
+.param Rin = 71.8330K
+.param Cin = 49.8910u
+.param amp = 100E-12
+.param phase = 0.72*pi
+.param csigdur = 4
+.param Zin = 520K
+.param RelAmp = 0.75
+.param memcap = 26u
+.param ReadRes = 8k
+.param epsilon0 = 55.263*1E+6 
+.param kb = 86.17u 
+
+
+.func fn_v(f) 1 - f  + f*ln(f)/6
+.func get_f(E) pwr(q, 3)/(4*pi*epsilon1*pwr(phi, 2))*E
+
+.func ifn(A, a, b, phi, vc, d, g) -1E-15*A*a*square(g*Efield(vc*1E+12, d))/phi*exp(limit(-b*pwr(phi, 3/2)/(g*Efield(vc*1E+12, d))*fn_v(get_f(g*Efield(vc*1E+12, d))), -160, 160))
+.func Efield(v,d) abs(max(v/d, 1E-13))
+
+.func is(A, alph, T, phi, vc, d, g) -1E-15*A*alph*square(T)*exp(limit((-phi +0.5*sqrt(g*Efield(vc*1E+12, d)/(pi*epsilon0)))/(Kb*T), -160, 160))
+
+

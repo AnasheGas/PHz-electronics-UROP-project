@@ -1,0 +1,79 @@
+* C:\Users\allen\Downloads\Getting started\Getting started\nanoantenna_component_files\Memcell_with_nanoantennav2_copy.asc
+R5 N003 N004 {Rwire}
+T1 N004 0 N005 0 Td=10.25 Z0={Zin}
+B§store1 N001 0 V=gaussian_pulse({amp}, 90, {sigdur}, {phase})
+B§read1 N002 readref V= {relAmp}*(gaussian_pulse({amp}, 55, 3, 0) + gaussian_pulse({amp}, 125, 3, 0) +gaussian_pulse({amp}, 190, 3, 0)+gaussian_pulse({amp}, 275, 3, 0))
+B§set1 readref N005 V= 1.5*(gaussian_pulse({amp}, 20,{csigdur} , {phase})+gaussian_pulse({amp}, 240,{csigdur} , {phase}))
+C7 N005 0 {memcap}
+XX1 N001 N003 0 nanoantenna_component params: nanoantenna_component cap_gap_ratio = c_gap_ratio
+XX2 N002 P001 N005 nanoantenna_component params: nanoantenna_component cap_gap_ratio = c_gap_ratio
+Read P001 0 {ReadRes}
+
+* block symbol definitions
+.subckt nanoantenna_component Vin E C
+B1 btmEmtr2 C I=ifn(40, 1.5414u, 6.8309, 5.3, V(C, btmEmtr2), 15, 1) + is(10, 0.005f, 290, 5.3, V(C, btmEmtr2), 40*cap_gap_ratio, 1)
+C1 N002 btmEmtr2 {Cbody}
+Cgap1 C btmEmtr2 {Cgap*cap_gap_ratio}
+C2 C N002 {Cwirebody}
+Rbod1 N002 N003 {0.5*(cp+1)*Rbody}
+R1 E N004 {0.5*(1-cp)*Rbody}
+L1 N003 E {0.5*(cp+1)*Lbody}
+L2 N004 btmEmtr2 {0.5*(1-cp)*Lbody}
+R2 N001 Vin {Rin}
+C3 N002 N001 {Cin}
+.param Cbody = 0.7089u
+.param Lbody = 158200
+.param Rbody = 4.0348K
+.param freq = 0.28201
+.param Cgap = 1.3618u
+.param Cwirebody = 0.7488u
+.param Lwire = 708593
+.param Rwire = 28.75K
+.param q = 1
+.param epsilon1 = 6.9*0.055263
+.param RTline = 6k
+.param phi = 5.3
+.param Rin = 71.8330K
+.param Cin = 49.8910u
+.param amp = 10E-12
+.param phase = 0.72*pi
+.param sigdur = 5.1
+.param Zin = 520K
+.func fn_v(f) 1 - f + f*ln(f)/6
+.func get_f(E) pwr(q, 3)/(4*pi*epsilon1*pwr(phi, 2))*E
+.func ifn(A, a, b, phi, vc, d, g) -1E-15*A*a*square(7*g*Efield(vc*1E+12, d))/phi*exp(-b*pwr(phi, 2/3)/(7*g*Efield(vc*1E+12, d))*fn_v(get_f(7*g*Efield(vc*1E+12, d))))
+.func Efield(v,d) abs(max(v/d, 0))
+.func is(A, alph, T, phi, vc, d, g) -1E-15*A*alph*square(T)*exp(min((-phi +0.5*sqrt((g*Efield(vc*1E+12, d)/(d*3.14*0.055263))/(0.8617u*T)), 0)))
+.ends nanoantenna_component
+
+.tran 0 351 0 0.003
+.param cp = -0.89
+.param ccor = 1
+.param Cbody = 0.7089u
+.param Lbody = 158200
+.param Rbody = 4.0348K
+.param freq = 0.26 Cgap =   1.3618u
+.param Cwirebody = 0.7488u
+.param Lwire = 708593
+.param Rwire = 30.0K
+.param q = 1
+.param epsilon1 = 6.9*0.055263
+.param RTline = 6k
+.param phi = 5.3
+.param Rin = 71.8330K
+.param Cin = 49.8910u
+.param amp = 1.5e-11 phase = 0.72*pi
+.param sigdur = 5.6 csigdur = 4
+.param Zin = 520K
+.param RelAmp = 0.75
+.param memcap = 26u
+.param ReadRes = 8k
+.func fn_v(f) 1 - f  + f*ln(f)/6
+.func get_f(E) pwr(q, 3)/(4*pi*epsilon1*pwr(phi, 2))*E
+.func ifn(A, a, b, phi, vc, d, g) -1E-15*A*a*square(7.11*g*Efield(vc*1E+12, d))/phi*exp(-b*pwr(phi, 2/3)/(7.11*g*Efield(vc*1E+12, d))*fn_v(get_f(7.11*g*Efield(vc*1E+12, d))))
+.fun Efield(v,d) abs(max(v/d, 0))
+.fun is(A, alph, T, phi, vc, d, g) -1E-15*A*alph*square(T)*exp(min((-phi +0.5*sqrt((g*Efield(vc*1E+12, d)/(d*3.14*0.055263))/(0.8617u*T)), 0)))
+.func gaussian_pulse(a, b, c, phase) a*exp(-square((time- b)/c)/2)*cos(2*pi*freq*(time - b)-phase)
+.param c_gap_ratio = 1
+.backanno
+.end

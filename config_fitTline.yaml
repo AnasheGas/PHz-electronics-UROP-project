@@ -1,0 +1,32 @@
+.param Cbody = 0.7089u
+.param Lbody = 158200
+.param Rbody = 4.0348K
+.param freq = 0.26
+.param Cgap =	1.3618u
+.param Cwirebody = 0.7488u
+.param Lwire = 708593
+.param Rwire = 30.0K
+.param q = 1
+.param epsilon1 = 6.9*0.055263
+.param RTline = 6k
+.param phi = 5.3
+.param Rin = 71.8330K
+.param Cin = 49.8910u
+.param amp = 30E-12
+.param phase = 0.72*pi
+.param sigdur = 5.6
+.param csigdur = 4
+.param Zin = 520K
+.param RelAmp = 0.75
+.param memcap = 26u
+.param ReadRes = 8k
+
+.func fn_v(f) 1 - f  + f*ln(f)/6
+.func get_f(E) pwr(q, 3)/(4*pi*epsilon1*pwr(phi, 2))*E
+
+.func ifn(A, a, b, phi, vc, d, g) -1E-15*A*a*square(7.11*g*Efield(vc*1E+12, d))/phi*exp(-b*pwr(phi, 2/3)/(7.11*g*Efield(vc*1E+12, d))*fn_v(get_f(7.11*g*Efield(vc*1E+12, d))))
+.fun Efield(v,d) abs(max(v/d, 0))
+.fun is(A, alph, T, phi, vc, d, g) -1E-15*A*alph*square(T)*exp(min((-phi +0.5*sqrt((g*Efield(vc*1E+12, d)/(d*3.14*0.055263))/(0.8617u*T)), 0)))
+
+
+.func gaussian_pulse(a, b, c, phase) a*exp(-square((time- b)/c)/2)*cos(2*pi*freq*(time - b)-phase)

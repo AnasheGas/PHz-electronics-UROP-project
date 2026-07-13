@@ -1,0 +1,29 @@
+.param Cbody = 0.50850u
+.param Lbody = 169600
+.param Rbody = 8.40K
+.param Cgap =  1.4222u
+.param Cwirebody = 0.93964u
+.param Rin = 71.90113K
+.param Cin =  49.8909u
+.param enhancement = 7.1402
+.param Rwire1 = 192.88K
+.param Rwire2 = 192.88K
+.param Rstub = 72K
+.param TimeDelay1 = 1.6677785
+.param TimeDelay2 = 1.6677785
+.param TDstub = 0.6254169
+.param q = 1
+.param epsilon1 = 6.9*55.263*1E+6
+.param epsilon0 = 55.263*1E+6
+.param kb = 86.17u 
+.param phi = 5.1
+.param amp = 0.1
+.param phase = 0.72*pi
+;param Zin = 459.94K
+.param Zin = 659.75K
+
+
+
+;Values from fit over restricted Lbody and Rbody
+;L_body = 0.1582 pH, R_body = 4.0348, c_body = 0.7089 aF
+;c_gap = 1.3618 aF, cwb = 0.7488 aF, Rin = 71.8330, Cin= 49.8910 aF 
