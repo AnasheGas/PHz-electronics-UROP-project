@@ -1,0 +1,22 @@
+;Real Capacitances, multiply by 1E12
+.param Cbody = 0.50850E-18 
+.param Cin =  49.8909E-18
+.param Cgap =  1.4222E-18
+.param Cwirebody = 0.93964E-18
+
+;Real Inductances, multiply by 1E18
+.param Lbody = 1.696E-13
+
+;Real Resistances, multiply by 1E3
+.param Rbody = 8.40
+.param Rin = 71.90113
+
+;For electric field calculations
+.param epsilon1 = 6.9*55.263*1E+6
+.param epsilon0 = 55.263*1E+6
+.param kb = 86.17u 
+.param phi = 5.1
+.param amp = 35E-12
+.param phase = 0.72*pi
+.param sigdur = 5.1
+.param q = 1
