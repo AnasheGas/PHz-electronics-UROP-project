@@ -1,0 +1,33 @@
+
+* Nanoantenna Component Library
+.subckt nanoantenna_component vin vout gnd
+R9 vin int_node1 {Rin}
+C11 int_node1 vout {Cin}
+Rbod2 vout int_node2 {0.5*(cp+1)*Rbody}
+L8 int_node2 gnd {0.5*(cp+1)*Lbody}
+C8 int_node2 gnd {Cbody}
+R8 vout int_node3 {0.5*(1-cp)*Rbody}
+L9 int_node3 gnd {0.5*(1-cp)*Lbody}
+C9 int_node3 gnd {Cwirebody}
+RReadout int_node2 gnd {Readcurr}
+Cgap4 vout gnd {Cgap}
+B4 int_node4 int_node3 I=ifn(40, 1.5414u, 6.8309, 5.3, V(C, n006), 15, 1) + is(10, 0.005f, 290, 5.3, V(C, n006), 15, 1)
+.ends nanoantenna_component
+
+.param Cbody=0.7089u Lbody=158200 Rbody=4.0348K
+.param Cgap=1.3618u Cwirebody=0.7488u
+.param Lwire=708593 Rwire=28.75K q=1 epsilon1=6.9*0.055263
+.param freq=0.28201
+.param RTline=6k
+.param Rin=71.8330K
+.param Cin=49.8910u
+.param amp=10E-12
+.param phase=0.72*pi
+.param sigdur=5.1
+.param Zin=520K
+
+.func fn_v(f) 1 - f + f*n(f)/6
+.func get_E(f) pwr(q,3)/(4*pi*epsilon1*pwr(phi,2))*E
+.func ifn(A, b, phi, vc, d, g) -1E-15*A*a*square(7*g*Efield(vc*1E+12,d))/phi*exp(-b*pwr(phi,2/3)/(7*g*Efield(vc*1E+12,d)))
+.func Efield(v,d) abs(max(v/d,0))
+.func is(A,alph,T,phi,vc,d,g) -1E-15*A*alph*square(T)*exp(min((-phi+0.5*sqrt((g*Efield(vc*1E+12,d)/d*3.14*T))),0))
