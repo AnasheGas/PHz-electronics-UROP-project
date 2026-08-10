@@ -1,12 +1,13 @@
 
-O1 N001 N008 N002 N005 Stub1
-C1 N002 N005 0.468µ
-O2 N003 N006 N004 N007 roundTline
-C2 0 N011 0.468µ
+
+O1 N001 N008 N004 N006 Stub1
+O2 N002 N005 N003 N007 roundTline
+C4 N004 N006 0.468µ
+O5 N010 N009 0 N011 Stub2
+C11 0 N011 0.468µ
 readout1 0 N011 {Rread}
-O3 N010 N009 0 N011 Stub2
-X§X3 N004 N007 N001 N008 single_antenna_normalized params: amp = {ampY} del = 105 phase = {phaseTop} sigdur = {sigdurTop} d = {dTop}
-X§X4 N006 N003 N010 N009 single_antenna_normalized params: amp = {ampX} del = {105 + delt} phase = {phaseTop} sigdur = {sigdurTop} d ={dTop}
+X§X1 N003 N007 N001 N008 single_antenna_normalized params: amp = {ampY} del = 105 phase = {phaseTop} sigdur = {sigdurTop} d = {dTop}
+X§X2 N005 N002 N010 N009 single_antenna_normalized params: amp = {ampX} del = {105 + delt} phase = {phaseTop} sigdur = {sigdurTop} d = dTop
 
 * block symbol definitions
 .subckt single_antenna_normalized E2 C2 E1 C1
@@ -48,7 +49,7 @@ B§EmissionSrc1 btmEmtr1 clctr1 I = 0.99*ifn(2.4E-16, 1.5414u, 6.8309G, 5.3, -1*V
 .ends single_antenna_normalized
 
 .tran 0 260 120 0.007
-.step param delt 17 18.5 0.25
+.param delt = 3
 .param Rread = 448k
 .param leff=1.2
 .include config_coupled_subckt.yaml
@@ -57,13 +58,11 @@ B§EmissionSrc1 btmEmtr1 clctr1 I = 0.99*ifn(2.4E-16, 1.5414u, 6.8309G, 5.3, -1*V
 .model Stub2 LTRA(len={leff*0.2u} R={200G} L=5.791T C=13.3)
 .opt method=gear abstol=1e-16 reltol=1e-15 gmin=1e-12 Trtol=0.02
 .opt chgtol=5e-18 itl1=300 itl2=450 itl4=500 itl5= 800
-.param ampY = Ey*dTop
-.param ampX = Ex*dTop
+.param ampY = 3.54E-4*dTop
+.param ampX = 1.73E-4*dTop
 .param phaseTop = 0.72*pi
 .param sigdurTop = 5.1
-.step param dTop LIST 40n 60n 150n 300n
-.param Ex = 1.73E-4
-.param Ey = 3.54E-4
+.param dTop = 65n
 .backanno
 .end
 
